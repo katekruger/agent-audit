@@ -23,3 +23,30 @@ for the JSON Schema and the Python package independently.
 - Worked examples for all four completion patterns: auto-allowed read,
   human-approved write, denied proposal, decision timeout — each validated
   against the schema in CI.
+- Spec additions needed by the reference emitter's edge cases: Pattern E
+  (superseded before a decision), batch fan-out (§5.4, one decision many
+  executions), retry linkage via `agent_audit.action.parent_id` (§5.5),
+  and the decision-latency non-negativity rule (§6.5).
+- `py/src/agent_audit_record/`: the reference Python emitter
+  (`emitter.py`, `phases.py`, `cost.py`, `config.py`). Emits OTel
+  LogRecord Events; never crashes its host on exporter/config failure;
+  enforces the `level=metadata` argument-redaction boundary; refuses to
+  emit an `executed` record after a denial/cancel/timeout decision.
+  100% test coverage, every emitted record validated against the JSON
+  Schema in CI.
+- `integrations/claude-code-hooks/`: zero-code hooks receiver mapping
+  PreToolUse/PermissionRequest/PermissionDenied/PostToolUse to the
+  three-phase model.
+- `examples/denied-proposal/`: the flagship example is now runnable
+  (`run.py`, `run.sh`), verified end-to-end against a real local OTel
+  Collector.
+- `docs/cost-of-denied-proposals.md`, `docs/backend-compatibility.md`:
+  the launch metric writeup, and honest verification results against
+  real local Arize Phoenix and Langfuse instances (neither currently
+  implements OTLP log ingestion — traces/metrics only).
+- `integrations/mcp-middleware/`: `AgentAuditMiddleware` for the
+  official MCP Python SDK (v2 line) — wraps every `tools/call` in
+  `proposed`/`executed`, with `current_action_id()` letting a tool's own
+  approval logic correlate a `decided` call into the same pair.
+- Fixed a spec gap surfaced by dogfooding: `auto_deny` now forbids
+  execution and requires `cost.wasted=true`, exactly like `deny`.

@@ -38,9 +38,11 @@ jobs:
         working-directory: py
         run: uv run pyright
 
-      - name: pytest
+      - name: pytest (with coverage)
         working-directory: py
-        run: uv run pytest
+        run: |
+          uv run coverage run -m pytest
+          uv run coverage report -m
 
   validate-examples:
     name: Validate examples against JSON Schema
@@ -63,3 +65,7 @@ jobs:
             uv run --with jsonschema python scripts/validate_example.py \
               spec/schema/v1/agent-audit.schema.json "$f"
           done
+
+      - name: Smoke-test the flagship example (no OTLP endpoint required)
+        working-directory: examples/denied-proposal
+        run: uv run --project ../../py --group examples python run.py
