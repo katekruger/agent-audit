@@ -1,0 +1,44 @@
+[
+  {
+    "agent_audit.action.id": "2b3c4d5e-6f7a-4b2c-9d3e-4f5a6b7c8d9e",
+    "agent_audit.action.phase": "proposed",
+    "agent_audit.schema_url": "https://raw.githubusercontent.com/katekruger/agent-audit/main/spec/schema/v1/agent-audit.schema.json",
+    "agent_audit.level": "request",
+    "agent_audit.actor.id": "agent-crm-assistant",
+    "agent_audit.actor.type": "agent",
+    "agent_audit.actor.on_behalf_of": "kate@company.com",
+    "agent_audit.target.system": "salesforce",
+    "agent_audit.target.resource": "Opportunity/006xx000004TmiRAAS",
+    "agent_audit.target.operation": "update",
+    "agent_audit.target.arguments": { "StageName": "Closed Won" },
+    "agent_audit.declared.read_only": false,
+    "agent_audit.declared.destructive": true,
+    "agent_audit.declared.idempotent": false,
+    "agent_audit.declared.open_world": false
+  },
+  {
+    "agent_audit.action.id": "2b3c4d5e-6f7a-4b2c-9d3e-4f5a6b7c8d9e",
+    "agent_audit.action.phase": "decided",
+    "agent_audit.schema_url": "https://raw.githubusercontent.com/katekruger/agent-audit/main/spec/schema/v1/agent-audit.schema.json",
+    "agent_audit.decision": "allow",
+    "agent_audit.decision.reason": "Single opportunity stage change matches deal-desk approval workflow",
+    "agent_audit.decision.principal.id": "kate@company.com",
+    "agent_audit.decision.principal.type": "human",
+    "agent_audit.decision.latency_ms": 45231,
+    "agent_audit.effective.read_only": false
+  },
+  {
+    "agent_audit.action.id": "2b3c4d5e-6f7a-4b2c-9d3e-4f5a6b7c8d9e",
+    "agent_audit.action.phase": "executed",
+    "agent_audit.schema_url": "https://raw.githubusercontent.com/katekruger/agent-audit/main/spec/schema/v1/agent-audit.schema.json",
+    "agent_audit.outcome": "success",
+    "agent_audit.effect.records_changed": 1,
+    "agent_audit.effect.reversible": true,
+    "agent_audit.effect.undo_token": "undo_8f3a1c9e",
+    "agent_audit.cost.amount": 0.0021,
+    "agent_audit.cost.currency": "usd",
+    "agent_audit.cost.unit": "usd",
+    "agent_audit.cost.component": "total",
+    "agent_audit.cost.wasted": false
+  }
+]

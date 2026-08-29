@@ -6,8 +6,9 @@ what executed, and what it cost.**
 An OpenTelemetry semantic convention plus a thin reference emitter. The
 record, not the enforcer.
 
-> **Status:** early scaffold. The specification is not yet written — see
-> [`BUILD-PLAN.md`](BUILD-PLAN.md) for the plan and
+> **Status:** draft specification. See
+> [`spec/SPECIFICATION.md`](spec/SPECIFICATION.md) for the normative
+> definition, [`BUILD-PLAN.md`](BUILD-PLAN.md) for the plan, and
 > [`docs/plans/going-public-checklist.md`](docs/plans/going-public-checklist.md)
 > for what has to be true before this repo goes public.
 
@@ -23,6 +24,16 @@ three-phase event model — `proposed` → `decided` → `executed` — that bin
 those events together with a correlation ID, records approver identity as
 a first-class field, and models the cost of both executed actions and
 proposals a human rejected before they ran.
+
+`agent-audit` also does not let a server's self-reported claims stand in
+for a decision's justification. MCP tool annotations like `readOnlyHint`
+are, per the MCP spec itself, hints — not guaranteed to be faithful, and
+not a safe basis for a client's decision. **CloudTrail records `readOnly`
+as fact. MCP's `readOnlyHint` is a claim.** `agent-audit` records both,
+under separate attribute names (`agent_audit.declared.*` vs.
+`agent_audit.effective.*`), and a decision's recorded reason must reflect
+the effective conclusion, never the declared claim — see
+[spec §6.4](spec/SPECIFICATION.md#64-declared-vs-effective-annotations).
 
 ## How this relates to what already exists
 

@@ -1,23 +1,161 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/katekruger/agent-audit/main/spec/schema/v1/agent-audit.schema.json",
-  "title": "agent-audit record (v1, draft skeleton)",
-  "description": "PLACEHOLDER schema. Not yet normative — see spec/SPECIFICATION.md and BUILD-PLAN.md milestone M1. Only the fields settled in the build plan's core-attributes section (agent_audit.action.id / .phase) are enforced so far.",
+  "title": "agent-audit record (v1)",
+  "description": "Normative JSON Schema for one agent_audit.* Record, as defined in spec/SPECIFICATION.md. This URL is immutable once published — see spec/SPECIFICATION.md §9. A backward-incompatible or additive change requires a new v2 schema, not an edit to this file.",
   "type": "object",
   "required": ["agent_audit.action.id", "agent_audit.action.phase"],
   "properties": {
     "agent_audit.action.id": {
       "type": "string",
-      "description": "Correlates the three phase events for one action (UUIDv4)."
+      "description": "Correlates the Records for one action (spec §5.3). RECOMMENDED format: UUIDv4."
     },
     "agent_audit.action.phase": {
       "type": "string",
-      "enum": ["proposed", "decided", "executed"]
+      "enum": ["proposed", "decided", "executed"],
+      "description": "Spec §5.1. MUST match the Record's EventName."
     },
     "agent_audit.schema_url": {
       "type": "string",
       "format": "uri"
-    }
+    },
+    "agent_audit.level": {
+      "type": "string",
+      "enum": ["metadata", "request", "request_response"],
+      "description": "Spec §7."
+    },
+
+    "agent_audit.actor.id": { "type": "string" },
+    "agent_audit.actor.type": {
+      "type": "string",
+      "enum": ["agent", "human", "policy", "system"]
+    },
+    "agent_audit.actor.on_behalf_of": { "type": "string" },
+
+    "agent_audit.target.system": { "type": "string" },
+    "agent_audit.target.resource": { "type": "string" },
+    "agent_audit.target.operation": { "type": "string" },
+    "agent_audit.target.arguments": {
+      "description": "Gated by agent_audit.level — spec §6.3."
+    },
+
+    "agent_audit.declared.read_only": { "type": "boolean" },
+    "agent_audit.declared.destructive": { "type": "boolean" },
+    "agent_audit.declared.idempotent": { "type": "boolean" },
+    "agent_audit.declared.open_world": { "type": "boolean" },
+    "agent_audit.effective.read_only": { "type": "boolean" },
+
+    "agent_audit.decision": {
+      "type": "string",
+      "enum": ["allow", "deny", "defer", "cancel", "timeout", "auto_allow", "auto_deny"]
+    },
+    "agent_audit.decision.reason": { "type": "string" },
+    "agent_audit.decision.principal.id": { "type": "string" },
+    "agent_audit.decision.principal.type": {
+      "type": "string",
+      "enum": ["human", "policy", "timeout", "default"]
+    },
+    "agent_audit.decision.policy.id": { "type": "string" },
+    "agent_audit.decision.policy.version": { "type": "string" },
+    "agent_audit.decision.latency_ms": { "type": "integer", "minimum": 0 },
+
+    "agent_audit.outcome": {
+      "type": "string",
+      "enum": ["success", "failure", "timeout", "not_executed"]
+    },
+    "agent_audit.not_executed_reason": {
+      "type": "string",
+      "enum": ["denied", "cancelled", "expired", "superseded"]
+    },
+    "agent_audit.effect.records_changed": { "type": "integer", "minimum": 0 },
+    "agent_audit.effect.reversible": { "type": "boolean" },
+    "agent_audit.effect.undo_token": { "type": "string" },
+
+    "agent_audit.cost.amount": { "type": "number" },
+    "agent_audit.cost.currency": {
+      "type": ["string", "null"],
+      "description": "ISO 4217 currency code, or null for a non-monetary unit."
+    },
+    "agent_audit.cost.unit": {
+      "type": "string",
+      "enum": ["usd", "api_calls", "credits", "seat_hours", "quota"]
+    },
+    "agent_audit.cost.component": {
+      "type": "string",
+      "enum": ["inference", "action", "total"]
+    },
+    "agent_audit.cost.wasted": { "type": "boolean" }
   },
+
+  "allOf": [
+    {
+      "if": {
+        "properties": { "agent_audit.action.phase": { "const": "proposed" } }
+      },
+      "then": {
+        "required": [
+          "agent_audit.actor.id",
+          "agent_audit.actor.type",
+          "agent_audit.target.system",
+          "agent_audit.target.resource",
+          "agent_audit.target.operation"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": { "agent_audit.action.phase": { "const": "decided" } }
+      },
+      "then": {
+        "required": ["agent_audit.decision", "agent_audit.decision.principal.type"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "agent_audit.action.phase": { "const": "decided" },
+          "agent_audit.decision": { "enum": ["deny", "cancel", "timeout"] }
+        },
+        "required": ["agent_audit.decision"]
+      },
+      "then": {
+        "required": ["agent_audit.cost.wasted"],
+        "properties": { "agent_audit.cost.wasted": { "const": true } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "agent_audit.action.phase": { "const": "executed" } }
+      },
+      "then": {
+        "required": ["agent_audit.outcome"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "agent_audit.action.phase": { "const": "executed" },
+          "agent_audit.outcome": { "const": "not_executed" }
+        },
+        "required": ["agent_audit.outcome"]
+      },
+      "then": {
+        "required": ["agent_audit.not_executed_reason"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "agent_audit.action.phase": { "const": "executed" },
+          "agent_audit.outcome": { "not": { "const": "not_executed" } }
+        },
+        "required": ["agent_audit.outcome"]
+      },
+      "then": {
+        "not": { "required": ["agent_audit.not_executed_reason"] }
+      }
+    }
+  ],
+
   "additionalProperties": true
 }

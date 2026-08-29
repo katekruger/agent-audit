@@ -1,14 +1,14 @@
-# Worked example: a denied proposal
+# Worked example: a denied proposal (Pattern C)
 
-This is the flagship example from the build plan: an agent proposes a
-write action, a human denies it, and the record captures the wasted
-inference cost — a metric no existing observability platform can produce
-today.
+The flagship example from the build plan: an agent proposes a bulk delete,
+a human denies it, and the record captures the wasted inference cost — a
+metric no existing observability platform can produce today.
 
-> **Status:** placeholder events, matching only the draft schema skeleton
-> in `spec/schema/v1/`. Will be filled out once `spec/SPECIFICATION.md`
-> (milestone M1) defines the full attribute set — cost fields, decision
-> principal, declared-vs-effective annotations, etc.
+Per [spec §5.2, Pattern C](../../spec/SPECIFICATION.md#52-completion-patterns--not-every-action-produces-all-three),
+this correlated action consists of exactly two Records — `proposed` and
+`decided` — and **no `executed` Record**, because the action never ran.
+`agent_audit.cost.wasted` is `true` on the `decided` Record: the schema
+requires this whenever `agent_audit.decision` is `deny`, `cancel`, or
+`timeout` (see [`spec/schema/v1/agent-audit.schema.json`](../../spec/schema/v1/agent-audit.schema.json)).
 
-`events.json` is validated against `spec/schema/v1/agent-audit.schema.json`
-in CI on every push.
+`events.json` is validated against the schema in CI on every push.
