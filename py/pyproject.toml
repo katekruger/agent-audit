@@ -47,6 +47,11 @@ dev = [
     "coverage==7.16.0",
     "jsonschema>=4.23.0",
 ]
+# Only the flagship example needs a real OTLP exporter; the library itself
+# depends on opentelemetry-api/-sdk alone, never a concrete exporter.
+examples = [
+    "opentelemetry-exporter-otlp-proto-http==1.44.0",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/agent_audit_record"]

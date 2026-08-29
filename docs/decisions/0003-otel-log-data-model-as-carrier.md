@@ -59,3 +59,19 @@ batching apply to audit records the same as any other telemetry (which is
 not obviously correct for records that may need compliance-grade delivery
 guarantees), and adoption is gated on an organization already having, or
 being willing to stand up, OTel infrastructure.
+
+**Verified 2026-08-29, and worse than the paragraph above assumed:** "gets
+every existing OTel exporter and backend for free" holds at the protocol
+and collector level (confirmed against `otel/opentelemetry-collector-contrib`
+in [`examples/denied-proposal/`](../../examples/denied-proposal/)), but
+**not yet at the level of AI-observability product backends**. Both Arize
+Phoenix (`version-20.4.0`) and Langfuse (`4.24.0`) implement OTLP ingestion
+for traces only (Langfuse also metrics) — neither has a Logs-signal
+ingestion route at all. See
+[`docs/backend-compatibility.md`](../backend-compatibility.md) for the
+full verification. The Log Data Model being Stable in the OTel spec has
+not yet translated into these specific products supporting that signal.
+This doesn't change the decision — the alternative (building on spans, or
+on a bespoke protocol) is still worse — but it means today's adopters need
+a generic collector between `agent-audit` and their storage of choice,
+not a direct line into these particular products.
