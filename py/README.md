@@ -17,9 +17,6 @@ at the repository root.
 pip install agent-audit-record
 ```
 
-> Distribution name is provisional — see
-> [ADR-0002](../docs/decisions/0002-python-distribution-name.md).
-
 ## Development
 
 ```bash

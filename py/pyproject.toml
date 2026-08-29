@@ -5,8 +5,7 @@ build-backend = "hatchling.build"
 [project]
 # NOTE: distribution name intentionally differs from the repo/spec name
 # `agent-audit` — that name is taken on PyPI by an unrelated package.
-# See docs/decisions/0002-python-distribution-name.md — PLACEHOLDER pending
-# owner confirmation before first publish.
+# See docs/decisions/0002-python-distribution-name.md (accepted).
 name = "agent-audit-record"
 version = "0.1.0.dev0"
 description = "Reference emitter for the agent-audit OpenTelemetry semantic convention: proposed -> decided -> executed."

@@ -2,14 +2,15 @@
 
 This repository starts **private**. Before flipping it to public, confirm:
 
-- [ ] The Python distribution name in [ADR-0002](../decisions/0002-python-distribution-name.md)
-      is confirmed by the project owner, not just the placeholder chosen
-      during scaffolding — a rename after publishing to PyPI is not
-      realistically possible.
+- [x] The Python distribution name in [ADR-0002](../decisions/0002-python-distribution-name.md)
+      is confirmed by the project owner (`agent-audit-record`, accepted
+      2026-08-29) — a rename after publishing to PyPI is not realistically
+      possible.
 - [ ] Raza Sharif (author of `draft-sharif-agent-audit-trail-01`) has been
       contacted, per the build plan's M0 milestone. Going public with a
       competing vocabulary before reaching out is explicitly called out in
-      the build plan as the worst available move.
+      the build plan as the worst available move. **Deliberately not done
+      yet** — the project owner chose to defer this outreach.
 - [ ] `spec/SPECIFICATION.md` exists and is not just a stub — the spec is
       the deliverable of this project.
 - [ ] `spec/schema/v1/` validates against the worked example in

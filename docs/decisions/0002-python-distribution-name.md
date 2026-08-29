@@ -1,6 +1,6 @@
 # 0002. Python distribution name
 
-- Status: proposed — PLACEHOLDER, pending owner confirmation
+- Status: accepted
 - Date: 2026-08-29
 
 ## Context
@@ -17,22 +17,16 @@ name needs to differ from the repository and specification name.
 
 ## Decision
 
-**Provisional pending owner confirmation:** the Python distribution and
-import package are named `agent-audit-record` / `agent_audit_record`,
-following the build plan's top-ranked candidate — it names the project's
-actual role ("the record, not the enforcer") rather than the transport
-(`agentaudit-otel`) or a generic rebrand (`openagentaudit`).
+The Python distribution and import package are named `agent-audit-record` /
+`agent_audit_record`, following the build plan's top-ranked candidate — it
+names the project's actual role ("the record, not the enforcer") rather
+than the transport (`agentaudit-otel`) or a generic rebrand
+(`openagentaudit`).
 
-**This choice was not confirmed by the project owner before scaffolding.**
-Do not treat this ADR as settled. Before the first PyPI publish:
-
-1. Re-check name availability on PyPI for the candidate.
-2. Confirm the owner is comfortable with the repo name (`agent-audit`)
-   differing from the distribution name (`agent-audit-record`) — this ADR
-   assumes that mismatch is less confusing than a forced rename of the
-   GitHub repository, but that has not been validated with the owner.
-3. Update this ADR's status to `accepted` once confirmed, or supersede it
-   with the actual chosen name.
+Confirmed by the project owner on 2026-08-29. Re-checked against PyPI on
+the same date — `https://pypi.org/pypi/agent-audit-record/json` returns
+404, i.e. still unclaimed. The repository name (`agent-audit`) stays as-is;
+only the PyPI distribution name differs from it.
 
 ## Consequences
 
