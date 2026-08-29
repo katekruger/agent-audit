@@ -1,0 +1,55 @@
+{
+  "_comment": "Merge the \"hooks\" block below into your .claude/settings.json (project or user-level). Requires no code change: each hook pipes its JSON payload on stdin to `curl`, which POSTs it to the agent-audit receiver (see receiver.py). Set AGENT_AUDIT_RECEIVER_URL before starting Claude Code, e.g. export AGENT_AUDIT_RECEIVER_URL=http://127.0.0.1:4317/hook",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -m 2 -X POST \"${AGENT_AUDIT_RECEIVER_URL:-http://127.0.0.1:4317/hook}\" -H 'Content-Type: application/json' -d @- >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -m 2 -X POST \"${AGENT_AUDIT_RECEIVER_URL:-http://127.0.0.1:4317/hook}\" -H 'Content-Type: application/json' -d @- >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ],
+    "PermissionDenied": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -m 2 -X POST \"${AGENT_AUDIT_RECEIVER_URL:-http://127.0.0.1:4317/hook}\" -H 'Content-Type: application/json' -d @- >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -m 2 -X POST \"${AGENT_AUDIT_RECEIVER_URL:-http://127.0.0.1:4317/hook}\" -H 'Content-Type: application/json' -d @- >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -m 2 -X POST \"${AGENT_AUDIT_RECEIVER_URL:-http://127.0.0.1:4317/hook}\" -H 'Content-Type: application/json' -d @- >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 from typing import Any
 
 from opentelemetry import trace
@@ -223,7 +224,12 @@ class Emitter:
             context = trace.set_span_in_context(span)
 
         try:
-            self._logger.emit(event_name=_EVENT_NAME[phase], attributes=attrs, context=context)
+            self._logger.emit(
+                event_name=_EVENT_NAME[phase],
+                attributes=attrs,
+                context=context,
+                timestamp=time.time_ns(),
+            )
         except Exception:
             if not self._warned:
                 _LOG.warning(
