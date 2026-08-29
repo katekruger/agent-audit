@@ -34,3 +34,19 @@ for the JSON Schema and the Python package independently.
   emit an `executed` record after a denial/cancel/timeout decision.
   100% test coverage, every emitted record validated against the JSON
   Schema in CI.
+- `integrations/claude-code-hooks/`: zero-code hooks receiver mapping
+  PreToolUse/PermissionRequest/PermissionDenied/PostToolUse to the
+  three-phase model.
+- `examples/denied-proposal/`: the flagship example is now runnable
+  (`run.py`, `run.sh`), verified end-to-end against a real local OTel
+  Collector.
+- `docs/cost-of-denied-proposals.md`, `docs/backend-compatibility.md`:
+  the launch metric writeup, and honest verification results against
+  real local Arize Phoenix and Langfuse instances (neither currently
+  implements OTLP log ingestion — traces/metrics only).
+- `integrations/mcp-middleware/`: `AgentAuditMiddleware` for the
+  official MCP Python SDK (v2 line) — wraps every `tools/call` in
+  `proposed`/`executed`, with `current_action_id()` letting a tool's own
+  approval logic correlate a `decided` call into the same pair.
+- Fixed a spec gap surfaced by dogfooding: `auto_deny` now forbids
+  execution and requires `cost.wasted=true`, exactly like `deny`.
