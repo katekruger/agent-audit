@@ -45,8 +45,13 @@ class Decision(StrEnum):
 
     @property
     def forbids_execution(self) -> bool:
-        """True for decisions after which spec Patterns C/D forbid an executed Record."""
-        return self in (Decision.DENY, Decision.CANCEL, Decision.TIMEOUT)
+        """True for decisions after which spec Patterns C/D forbid an executed Record.
+
+        AUTO_DENY is included alongside DENY: an automatic denial forbids
+        execution exactly as a human one does, differing only in
+        `decision.principal.type` -- not in whether cost was wasted.
+        """
+        return self in (Decision.DENY, Decision.AUTO_DENY, Decision.CANCEL, Decision.TIMEOUT)
 
 
 class PrincipalType(StrEnum):

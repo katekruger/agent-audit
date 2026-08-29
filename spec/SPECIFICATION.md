@@ -99,7 +99,9 @@ correlated action consists of `proposed` + `decided` (`agent_audit.decision`
 **A denial produces `proposed` + `decided` and MUST NOT be followed by an
 `executed` record.** The action never ran; there is nothing to execute,
 and emitting an `executed` record for a denied action is a specification
-violation. `agent_audit.decision` MUST be `deny` for this pattern.
+violation. `agent_audit.decision` MUST be `deny` or `auto_deny` for this
+pattern — the two differ only in `agent_audit.decision.principal.type`
+(§6.5), not in whether the action ran or its cost was wasted.
 
 This is precisely what makes the cost of a denied proposal computable: the
 absence of an `executed` record, combined with `agent_audit.cost.wasted`
@@ -359,7 +361,7 @@ models the cost of an action a human rejected before it ran.
 | `agent_audit.cost.currency` | string | **Optional** | ISO 4217 currency code, or absent/null for a non-monetary unit. |
 | `agent_audit.cost.unit` | string | **Optional** | One of `usd`, `api_calls`, `credits`, `seat_hours`, `quota`. |
 | `agent_audit.cost.component` | string | **Optional** | One of `inference`, `action`, `total`. |
-| `agent_audit.cost.wasted` | boolean | **Required** on `decided` Records where `agent_audit.decision` is `deny`, `cancel`, or `timeout`; **Optional** elsewhere | `true` when the cost recorded on this Record was spent on a proposal that produced no executed outcome. Absent is equivalent to `false`. |
+| `agent_audit.cost.wasted` | boolean | **Required** on `decided` Records where `agent_audit.decision` is `deny`, `auto_deny`, `cancel`, or `timeout`; **Optional** elsewhere | `true` when the cost recorded on this Record was spent on a proposal that produced no executed outcome. Absent is equivalent to `false`. |
 
 Per [ADR AGENTS.md "reuse before you define"](../AGENTS.md), implementations
 MUST NOT restate token counts or inference cost using new attribute names

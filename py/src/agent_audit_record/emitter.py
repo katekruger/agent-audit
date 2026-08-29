@@ -46,7 +46,7 @@ _EVENT_NAME: dict[Phase, str] = {
 
 class ExecutionAfterTerminalDecisionError(RuntimeError):
     """`executed()` was called for an action whose `decided` Record already
-    forbade execution (spec Patterns C/D: deny, cancel, or timeout).
+    forbade execution (spec Patterns C/D: deny, auto_deny, cancel, or timeout).
     """
 
 
@@ -130,9 +130,10 @@ class Emitter:
     ) -> None:
         """Emit `agent_audit.decided` (spec §6.5).
 
-        Raises `ValueError` if `decision.forbids_execution` (deny, cancel,
-        or timeout) and `cost` is missing or `cost.wasted` is not True --
-        spec §6.7 requires it, and the schema would reject the record.
+        Raises `ValueError` if `decision.forbids_execution` (deny,
+        auto_deny, cancel, or timeout) and `cost` is missing or
+        `cost.wasted` is not True -- spec §6.7 requires it, and the
+        schema would reject the record.
         """
         if decision.forbids_execution and (cost is None or not cost.wasted):
             raise ValueError(

@@ -215,6 +215,30 @@ class TestCompletionPatterns:
         with pytest.raises(ExecutionAfterTerminalDecisionError):
             emitter.executed(action_id="a1", outcome=Outcome.SUCCESS)
 
+    def test_auto_deny_also_forbids_execution_and_requires_cost_wasted(
+        self, emitter: Emitter
+    ) -> None:
+        """Found while dogfooding agent-audit in n8n-operator: an automatic
+        denial forbids execution exactly as a human one does, differing
+        only in principal.type -- not in whether cost was wasted.
+        """
+        with pytest.raises(ValueError, match=r"cost\.wasted"):
+            emitter.decided(
+                action_id="a1",
+                decision=Decision.AUTO_DENY,
+                principal_type=PrincipalType.POLICY,
+            )
+
+        _propose(emitter, "a2")
+        emitter.decided(
+            action_id="a2",
+            decision=Decision.AUTO_DENY,
+            principal_type=PrincipalType.POLICY,
+            cost=Cost(wasted=True),
+        )
+        with pytest.raises(ExecutionAfterTerminalDecisionError):
+            emitter.executed(action_id="a2", outcome=Outcome.SUCCESS)
+
 
 class TestExecutedValidation:
     def test_not_executed_requires_reason(self, emitter: Emitter) -> None:
