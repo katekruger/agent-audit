@@ -12,3 +12,14 @@ for the JSON Schema and the Python package independently.
 
 - Repository scaffold: spec/, py/ reference implementation skeleton,
   integrations/, examples/, docs/ with initial ADRs.
+- `spec/SPECIFICATION.md` v1 (draft): the three-phase event model, the four
+  completion patterns (including the proposed+decided-with-no-executed
+  asymmetry that makes denied-proposal cost computable), the full
+  attribute table, the declared-vs-effective trust boundary for MCP tool
+  annotations, the decision enum crosswalk, the `level` dial, and the cost
+  model.
+- `spec/schema/v1/agent-audit.schema.json`: normative JSON Schema with
+  per-phase conditional requirements.
+- Worked examples for all four completion patterns: auto-allowed read,
+  human-approved write, denied proposal, decision timeout — each validated
+  against the schema in CI.

@@ -1,0 +1,30 @@
+[
+  {
+    "agent_audit.action.id": "1a2b3c4d-5e6f-4a1b-8c2d-3e4f5a6b7c8d",
+    "agent_audit.action.phase": "proposed",
+    "agent_audit.schema_url": "https://raw.githubusercontent.com/katekruger/agent-audit/main/spec/schema/v1/agent-audit.schema.json",
+    "agent_audit.level": "metadata",
+    "agent_audit.actor.id": "agent-crm-assistant",
+    "agent_audit.actor.type": "agent",
+    "agent_audit.target.system": "salesforce",
+    "agent_audit.target.resource": "Account/001xx000003DGb2AAG",
+    "agent_audit.target.operation": "read",
+    "agent_audit.declared.read_only": true,
+    "agent_audit.declared.destructive": false,
+    "agent_audit.declared.idempotent": true,
+    "agent_audit.declared.open_world": false
+  },
+  {
+    "agent_audit.action.id": "1a2b3c4d-5e6f-4a1b-8c2d-3e4f5a6b7c8d",
+    "agent_audit.action.phase": "executed",
+    "agent_audit.schema_url": "https://raw.githubusercontent.com/katekruger/agent-audit/main/spec/schema/v1/agent-audit.schema.json",
+    "agent_audit.outcome": "success",
+    "agent_audit.effect.records_changed": 0,
+    "agent_audit.effect.reversible": true,
+    "agent_audit.cost.amount": 0.0004,
+    "agent_audit.cost.currency": "usd",
+    "agent_audit.cost.unit": "usd",
+    "agent_audit.cost.component": "inference",
+    "agent_audit.cost.wasted": false
+  }
+]

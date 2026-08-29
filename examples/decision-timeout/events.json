@@ -1,0 +1,31 @@
+[
+  {
+    "agent_audit.action.id": "3c4d5e6f-7a8b-4c3d-9e4f-5a6b7c8d9e1f",
+    "agent_audit.action.phase": "proposed",
+    "agent_audit.schema_url": "https://raw.githubusercontent.com/katekruger/agent-audit/main/spec/schema/v1/agent-audit.schema.json",
+    "agent_audit.level": "metadata",
+    "agent_audit.actor.id": "agent-ops-runner",
+    "agent_audit.actor.type": "agent",
+    "agent_audit.target.system": "n8n",
+    "agent_audit.target.resource": "workflow/promo-email-blast",
+    "agent_audit.target.operation": "trigger",
+    "agent_audit.declared.read_only": false,
+    "agent_audit.declared.destructive": true,
+    "agent_audit.declared.idempotent": false,
+    "agent_audit.declared.open_world": true
+  },
+  {
+    "agent_audit.action.id": "3c4d5e6f-7a8b-4c3d-9e4f-5a6b7c8d9e1f",
+    "agent_audit.action.phase": "decided",
+    "agent_audit.schema_url": "https://raw.githubusercontent.com/katekruger/agent-audit/main/spec/schema/v1/agent-audit.schema.json",
+    "agent_audit.decision": "timeout",
+    "agent_audit.decision.reason": "No response from the on-call approver within the 30-minute SLA",
+    "agent_audit.decision.principal.type": "timeout",
+    "agent_audit.decision.latency_ms": 1800000,
+    "agent_audit.cost.amount": 0.0012,
+    "agent_audit.cost.currency": "usd",
+    "agent_audit.cost.unit": "usd",
+    "agent_audit.cost.component": "inference",
+    "agent_audit.cost.wasted": true
+  }
+]
