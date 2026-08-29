@@ -120,7 +120,7 @@
       "if": {
         "properties": {
           "agent_audit.action.phase": { "const": "decided" },
-          "agent_audit.decision": { "enum": ["deny", "cancel", "timeout"] }
+          "agent_audit.decision": { "enum": ["deny", "auto_deny", "cancel", "timeout"] }
         },
         "required": ["agent_audit.decision"]
       },
