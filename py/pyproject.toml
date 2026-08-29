@@ -1,0 +1,76 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+# NOTE: distribution name intentionally differs from the repo/spec name
+# `agent-audit` — that name is taken on PyPI by an unrelated package.
+# See docs/decisions/0002-python-distribution-name.md — PLACEHOLDER pending
+# owner confirmation before first publish.
+name = "agent-audit-record"
+version = "0.1.0.dev0"
+description = "Reference emitter for the agent-audit OpenTelemetry semantic convention: proposed -> decided -> executed."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+authors = [{ name = "Kate Kruger" }]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Logging",
+    "Typing :: Typed",
+]
+dependencies = [
+    "opentelemetry-api>=1.27.0",
+    "opentelemetry-sdk>=1.27.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/katekruger/agent-audit"
+Specification = "https://github.com/katekruger/agent-audit/blob/main/spec/SPECIFICATION.md"
+Issues = "https://github.com/katekruger/agent-audit/issues"
+
+[dependency-groups]
+# PEP 735 dependency groups.
+dev = [
+    # Pinned exactly, not with a floor (`>=`): this repo is a spec, and a
+    # linter/type-checker version bump changing what passes CI should be a
+    # deliberate, reviewed change — not something that happens silently on
+    # a contributor's next `uv sync`.
+    "ruff==0.16.5",
+    "pyright==1.1.411",
+    "pytest==9.1.1",
+    "coverage==7.16.0",
+    "jsonschema>=4.23.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_audit_record"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pyright]
+include = ["src", "tests"]
+typeCheckingMode = "strict"
+pythonVersion = "3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src/agent_audit_record"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true

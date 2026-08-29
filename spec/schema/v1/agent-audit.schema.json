@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/katekruger/agent-audit/main/spec/schema/v1/agent-audit.schema.json",
+  "title": "agent-audit record (v1, draft skeleton)",
+  "description": "PLACEHOLDER schema. Not yet normative — see spec/SPECIFICATION.md and BUILD-PLAN.md milestone M1. Only the fields settled in the build plan's core-attributes section (agent_audit.action.id / .phase) are enforced so far.",
+  "type": "object",
+  "required": ["agent_audit.action.id", "agent_audit.action.phase"],
+  "properties": {
+    "agent_audit.action.id": {
+      "type": "string",
+      "description": "Correlates the three phase events for one action (UUIDv4)."
+    },
+    "agent_audit.action.phase": {
+      "type": "string",
+      "enum": ["proposed", "decided", "executed"]
+    },
+    "agent_audit.schema_url": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "additionalProperties": true
+}

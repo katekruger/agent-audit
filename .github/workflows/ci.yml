@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python (lint, types, tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          enable-cache: true
+
+      - name: Install
+        working-directory: py
+        run: uv sync --locked
+
+      - name: ruff check
+        working-directory: py
+        run: uv run ruff check .
+
+      - name: ruff format --check
+        working-directory: py
+        run: uv run ruff format --check .
+
+      - name: pyright
+        working-directory: py
+        run: uv run pyright
+
+      - name: pytest
+        working-directory: py
+        run: uv run pytest
+
+  validate-examples:
+    name: Validate examples against JSON Schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          enable-cache: true
+
+      - name: Validate every example
+        run: |
+          set -euo pipefail
+          shopt -s globstar nullglob
+          for f in examples/**/*.json; do
+            echo "Validating $f"
+            uv run --with jsonschema python scripts/validate_example.py \
+              spec/schema/v1/agent-audit.schema.json "$f"
+          done

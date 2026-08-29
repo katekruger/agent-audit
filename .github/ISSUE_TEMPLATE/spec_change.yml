@@ -1,0 +1,26 @@
+name: Specification change proposal
+description: Propose adding, changing, or removing an attribute in spec/SPECIFICATION.md.
+labels: ["spec"]
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What attribute or behavior are you proposing?
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: What gap does this fill?
+      description: Cite what existing conventions (gen_ai.*, llm.cost.*, MCP, the IETF draft) do NOT already cover. See AGENTS.md's "reuse before you define" rule.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked spec/mappings/otel-genai.md and this does not restate an existing gen_ai.* or llm.cost.* attribute
+          required: true
+        - label: This does not give agent-audit the ability to block or enforce anything (see ADR-0004)
+          required: true
