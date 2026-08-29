@@ -24,6 +24,10 @@
       "enum": ["metadata", "request", "request_response"],
       "description": "Spec §7."
     },
+    "agent_audit.action.parent_id": {
+      "type": "string",
+      "description": "Spec §5.5. The action.id of the prior attempt this action retries."
+    },
 
     "agent_audit.actor.id": { "type": "string" },
     "agent_audit.actor.type": {
@@ -70,6 +74,8 @@
     "agent_audit.effect.records_changed": { "type": "integer", "minimum": 0 },
     "agent_audit.effect.reversible": { "type": "boolean" },
     "agent_audit.effect.undo_token": { "type": "string" },
+    "agent_audit.batch.item_index": { "type": "integer", "minimum": 0 },
+    "agent_audit.batch.size": { "type": "integer", "minimum": 1 },
 
     "agent_audit.cost.amount": { "type": "number" },
     "agent_audit.cost.currency": {

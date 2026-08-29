@@ -38,9 +38,11 @@ jobs:
         working-directory: py
         run: uv run pyright
 
-      - name: pytest
+      - name: pytest (with coverage)
         working-directory: py
-        run: uv run pytest
+        run: |
+          uv run coverage run -m pytest
+          uv run coverage report -m
 
   validate-examples:
     name: Validate examples against JSON Schema
