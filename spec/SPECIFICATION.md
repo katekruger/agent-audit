@@ -65,7 +65,7 @@ A correlated action is described by up to three Records, distinguished by
 |---|---|---|---|
 | `proposed` | `agent_audit.proposed` | An agent has determined an action and is about to seek (or bypass) authorization for it. | An implementation conforming to this specification MUST emit `proposed` before the corresponding `decided` or `executed` record for the same `agent_audit.action.id`. |
 | `decided` | `agent_audit.decided` | A decision was reached — by a human, a policy engine, or a timeout. | MUST be emitted before any `executed` record for the same `agent_audit.action.id`, if a `decided` record is emitted at all (§5.2). |
-| `executed` | `agent_audit.executed` | The action ran to completion or failure, or was definitively abandoned without running. | MUST be the last record for a given `agent_audit.action.id`, if emitted at all. |
+| `executed` | `agent_audit.executed` | The action ran to completion or failure, or was definitively abandoned without running. | MUST be the last record(s) for a given `agent_audit.action.id`, if emitted at all — no `decided` or `proposed` record MUST follow it. Ordinarily exactly one `executed` record exists per `agent_audit.action.id`; §5.4 defines the one exception (batch fan-out), where more than one MAY share an `agent_audit.action.id`. |
 
 All Records for one correlated action MUST share the same
 `agent_audit.action.id`.
@@ -74,7 +74,7 @@ All Records for one correlated action MUST share the same
 
 **This asymmetry is the central design feature of this specification, not
 an edge case.** An implementation MUST NOT assume that a correlated action
-always consists of exactly three Records. Four patterns are defined:
+always consists of exactly three Records. Five patterns are defined:
 
 #### Pattern A — auto-decided
 
@@ -119,8 +119,31 @@ This is distinct from an *execution* timeout (§6.6, `agent_audit.outcome`
 = `timeout`), which describes an action that WAS approved, attempted, and
 then failed to complete in time. Implementations MUST distinguish these:
 a decision-phase timeout is Pattern D (no `executed` record); an
-execution-phase timeout is Pattern B or C's `executed` record carrying
+execution-phase timeout is Pattern A or B's `executed` record carrying
 `agent_audit.outcome` = `timeout`.
+
+#### Pattern E — superseded before a decision (no decision, no execution)
+
+A proposal is withdrawn or replaced — e.g. by a newer proposal, or because
+the actor no longer needs the action — before any principal reached a
+decision. **This is a terminal state reached without ever emitting a
+`decided` record.** The correlated action consists of `proposed` +
+`executed`, where the `executed` record carries `agent_audit.outcome` =
+`not_executed` and `agent_audit.not_executed_reason` = `superseded`
+(§6.6).
+
+Pattern E is deliberately shaped like Pattern A (`proposed` + `executed`,
+no `decided`) rather than like Pattern C or D, because no decision was
+ever sought or reached — there is nothing for a `decided` record to
+record. An implementation MUST NOT emit a `decided` record for an action
+whose outcome is `not_executed` with reason `superseded`.
+
+An approved action that is cancelled *after* a decision but before
+execution is a different case, not Pattern E: the correlated action still
+includes a `decided` record (`agent_audit.decision` = `allow`), and the
+`executed` record's `agent_audit.not_executed_reason` is `cancelled`, not
+`superseded`. The decision itself is not erased or revised by the later
+cancellation — it remains in the record exactly as reached, per §6.6.
 
 ### 5.3 Correlation
 
@@ -128,6 +151,41 @@ execution-phase timeout is Pattern B or C's `executed` record carrying
 correlated action's Records. Implementations MUST generate a new
 `agent_audit.action.id` per action (RECOMMENDED: UUIDv4) and MUST reuse
 the same value across all Records describing that one action's lifecycle.
+
+### 5.4 Batch fan-out: one decision, many executions
+
+A single approved (or auto-decided) proposal MAY authorize a batch of
+individually-executed operations — for example, one approval to "delete
+these 40 stale leads" that then executes 40 individual deletions, each of
+which might independently succeed or fail. For this case, and only this
+case, an implementation MAY emit more than one `executed` record sharing
+the same `agent_audit.action.id`. `proposed` and `decided` (if present)
+MUST still be emitted exactly once per `agent_audit.action.id`, consistent
+with §5.1.
+
+Each `executed` record in a batch SHOULD carry `agent_audit.batch.item_index`
+and `agent_audit.batch.size` (§6.6) so a consumer can group and count the
+records belonging to one batch and distinguish a batch fan-out from a
+specification violation (an implementation MUST NOT emit more than one
+`executed` record per `agent_audit.action.id` without these attributes,
+except by coincidence of a genuinely retried delivery, which consumers
+cannot be expected to distinguish from a violation without them).
+
+### 5.5 Retries: a new action, linked, never reused
+
+An implementation MUST NOT reuse `agent_audit.action.id` for a retried
+action — for example, re-attempting an action whose prior `executed`
+record carried `agent_audit.outcome` = `failure`. Reusing the same
+`agent_audit.action.id` would make the two attempts indistinguishable in
+the record, destroying exactly the information the audit trail exists to
+preserve (how many attempts were made, and what each one individually
+decided and cost).
+
+Instead, a retry MUST be proposed as a new action with a new
+`agent_audit.action.id`, and SHOULD carry `agent_audit.action.parent_id`
+(§6.1) set to the prior attempt's `agent_audit.action.id`, so that a
+consumer can reconstruct the retry chain without conflating distinct
+attempts into one record.
 
 ## 6. Attributes
 
@@ -153,6 +211,7 @@ Present on every Record, regardless of phase.
 | `agent_audit.action.phase` | string | **Required** | One of `proposed`, `decided`, `executed` (§5.1). MUST match the Record's `EventName`. |
 | `agent_audit.schema_url` | string (URI) | **Recommended** | The immutable, versioned URL of the JSON Schema this Record conforms to (§9). |
 | `agent_audit.level` | string | **Recommended** | One of `metadata`, `request`, `request_response` (§7). Governs how much of `agent_audit.target.arguments` (§6.3) this Record may legally carry. |
+| `agent_audit.action.parent_id` | string | **Recommended** on a `proposed` Record for a retried action (§5.5) | The `agent_audit.action.id` of the prior attempt this action retries. MUST NOT be set to the Record's own `agent_audit.action.id`. Absent for an action that is not a retry. |
 
 ### 6.2 Actor attributes
 
@@ -223,7 +282,17 @@ Present on `decided` Records.
 | `agent_audit.decision.principal.type` | string | **Required** on `decided` | One of `human`, `policy`, `timeout`, `default`. |
 | `agent_audit.decision.policy.id` | string | **Optional** | Identifier of the policy in force, when `principal.type` is `policy`. |
 | `agent_audit.decision.policy.version` | string | **Optional** | Version of the policy in force, when `principal.type` is `policy`. |
-| `agent_audit.decision.latency_ms` | integer | **Optional** | Milliseconds between the `proposed` Record and this `decided` Record. |
+| `agent_audit.decision.latency_ms` | integer | **Optional** | Milliseconds between the `proposed` Record and this `decided` Record. MUST NOT be negative (see note below). |
+
+`agent_audit.decision.latency_ms` MUST NOT be a negative number.
+Clock skew between the process or host that emitted the `proposed` Record
+and the one that emitted the `decided` Record can otherwise produce a
+negative computed value. An implementation that computes this attribute
+from two observed timestamps MUST omit the attribute entirely, rather than
+emit a negative value, when the computation would be negative. Each
+Record's own OTel LogRecord `Timestamp` (§4) remains available on both
+Records regardless, so a consumer that wants to reconstruct latency under
+its own skew-tolerant logic MAY do so from those two timestamps directly.
 
 #### 6.5.1 The decision enum: an interoperability layer, not a fourth dialect
 
@@ -261,11 +330,23 @@ Present on `executed` Records.
 | `agent_audit.effect.records_changed` | integer | **Optional** | Count of records or resources changed by the action. |
 | `agent_audit.effect.reversible` | boolean | **Optional** | Whether the effect can be undone. |
 | `agent_audit.effect.undo_token` | string | **Optional** | An opaque token usable to reverse the effect, when `agent_audit.effect.reversible` is `true` and the target system supports it. |
+| `agent_audit.batch.item_index` | integer | **Recommended** on an `executed` Record that is part of a batch fan-out (§5.4) | Zero-based index of this Record within the batch sharing its `agent_audit.action.id`. |
+| `agent_audit.batch.size` | integer | **Recommended** on an `executed` Record that is part of a batch fan-out (§5.4) | Total number of `executed` Records expected for the batch sharing this `agent_audit.action.id`. |
 
 An `executed` Record with `agent_audit.outcome` = `timeout` describes an
 action that was authorized and attempted, but did not complete within an
 expected window — this is distinct from Pattern D (§5.2), where the
 *decision itself* timed out and no `executed` Record exists at all.
+
+A decision recorded on a `decided` Record is never revised or removed by
+a later `executed` Record. An approved action (`agent_audit.decision` =
+`allow`) whose execution subsequently fails MUST still have its `executed`
+Record's `agent_audit.outcome` set to `failure` — the approval stands in
+the record exactly as it was reached, alongside the failure, not replaced
+by it. The same holds for an approved action cancelled before it runs:
+the `decided` Record's `allow` is unchanged, and the `executed` Record
+carries `agent_audit.outcome` = `not_executed` with
+`agent_audit.not_executed_reason` = `cancelled` (§5.2, Pattern E note).
 
 ### 6.7 Cost attributes
 
