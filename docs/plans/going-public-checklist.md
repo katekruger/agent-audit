@@ -59,5 +59,8 @@ This repository starts **private**. Before flipping it to public, confirm:
 - [x] M9 (OTel `mcp.*` PR): opened —
       [open-telemetry/semantic-conventions-genai#480](https://github.com/open-telemetry/semantic-conventions-genai/pull/480),
       2026-08-30. Built and validated (`make check-policies`,
-      `make generate-all`) against upstream before opening. Watch for
-      review comments; not merged yet.
+      `make generate-all`) against upstream before opening. EasyCLA
+      signed and all 41 checks passing as of 2026-08-30; sitting on
+      `open-telemetry/semconv-genai-approvers` code-owner review —
+      merging is on the upstream maintainers, not something we control
+      or need to act on further.
