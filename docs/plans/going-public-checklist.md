@@ -19,6 +19,8 @@ This repository starts **private**. Before flipping it to public, confirm:
       schema-validates-examples job.
 - [ ] `README.md` states the AGT and IETF-draft positioning honestly — see
       [ADR-0004](../decisions/0004-record-not-enforcer.md).
+- [x] `docs/why-not-a-protocol.md` and `docs/vs-agent-governance-toolkit.md`
+      are full posts, not placeholders — accepted 2026-08-30.
 - [ ] No secrets, tokens, or personal data committed anywhere in history
       (`git log --all -p | grep`, or a tool like `gitleaks`, before the
       first push to a public remote — not after).

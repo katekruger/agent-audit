@@ -8,6 +8,17 @@ for the JSON Schema and the Python package independently.
 
 ## [Unreleased]
 
+### Added
+
+- `docs/decisions/0005-hash-chaining-deferred.md`,
+  `docs/decisions/0006-ietf-outreach-deferred-before-public.md`: ADRs
+  for the two deferred decisions that were previously only implicit in
+  `BUILD-PLAN.md`'s open questions and the going-public checklist.
+- `docs/why-not-a-protocol.md`, `docs/vs-agent-governance-toolkit.md`:
+  expanded from placeholders into full posts. The AGT comparison
+  includes a real, signature-checked code sample against the actual
+  `Emitter` API rather than a hypothetical one.
+
 ## [0.1.0] - 2026-08-30
 
 M6 of [`BUILD-PLAN.md`](BUILD-PLAN.md): the specification, the reference
