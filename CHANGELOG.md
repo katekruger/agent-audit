@@ -10,6 +10,23 @@ for the JSON Schema and the Python package independently.
 
 ### Added
 
+- `docs/plans/pypi-trusted-publishing-setup.md`: precise step-by-step
+  for configuring PyPI/TestPyPI Trusted Publishing, since that
+  configuration lives in external accounts this repo can't touch
+  directly.
+- M9 prep (not opened): a draft PR branch at
+  `katekruger/semantic-conventions-genai@mcp-2026-07-28-attribute-coverage`
+  catching up the OTel `mcp.*` namespace to the MCP 2026-07-28 protocol
+  revision — five methods deprecated for having been fully removed
+  from the wire schema (`initialize`, `notifications/initialized`,
+  `ping`, `resources/subscribe`, `resources/unsubscribe`), four more
+  deprecated per SEP-2577, three new methods added, and
+  `mcp.session.id`'s description corrected (it linked to a
+  `#session-management` anchor that no longer exists, since
+  protocol-level sessions were removed in this revision). Verified
+  against the real upstream `schema.ts` and transports spec, not just
+  BUILD-PLAN.md's claims; validated with the upstream repo's own
+  `make check-policies` and `make generate-all`.
 - `docs/decisions/0005-hash-chaining-deferred.md`,
   `docs/decisions/0006-ietf-outreach-deferred-before-public.md`: ADRs
   for the two deferred decisions that were previously only implicit in

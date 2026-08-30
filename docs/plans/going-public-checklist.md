@@ -10,7 +10,11 @@ This repository starts **private**. Before flipping it to public, confirm:
       contacted, per the build plan's M0 milestone. Going public with a
       competing vocabulary before reaching out is explicitly called out in
       the build plan as the worst available move. **Deliberately not done
-      yet** — the project owner chose to defer this outreach.
+      yet** — the project owner chose to defer this outreach; see
+      [ADR-0006](../decisions/0006-ietf-outreach-deferred-before-public.md).
+      A ready-to-send draft (with the author's public IETF-datatracker
+      contact address) exists outside this repo, pending the owner's
+      review and send.
 - [ ] `spec/SPECIFICATION.md` exists and is not just a stub — the spec is
       the deliverable of this project.
 - [ ] `spec/schema/v1/` validates against the worked example in
@@ -30,7 +34,9 @@ This repository starts **private**. Before flipping it to public, confirm:
       flip `advanced-security: "false"` / `annotations: "true"` back to
       `advanced-security: "true"` so findings land in the Security tab
       (requires GitHub Advanced Security, free for public repos).
-- [ ] `.github/workflows/release.yml` exists. Before the first tag push:
+- [ ] `.github/workflows/release.yml` exists. Before the first tag push,
+      follow [pypi-trusted-publishing-setup.md](pypi-trusted-publishing-setup.md)
+      end to end:
   - [ ] A `testpypi` GitHub Environment exists, pointed at a pending
         Trusted Publisher configured at
         <https://test.pypi.org/manage/account/publishing/> for
@@ -50,3 +56,8 @@ This repository starts **private**. Before flipping it to public, confirm:
         as of the ADR-0002 check date" — a pending publisher only
         reserves the name once the first Trusted-Publishing upload
         actually lands.
+- [ ] M9 (OTel `mcp.*` PR): a draft exists on
+      `katekruger/semantic-conventions-genai@mcp-2026-07-28-attribute-coverage`,
+      built and validated (`make check-policies`, `make generate-all`)
+      against upstream, but **not opened as a PR** — pending the
+      project owner's review of the draft description.
