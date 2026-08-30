@@ -50,3 +50,17 @@ for the JSON Schema and the Python package independently.
   approval logic correlate a `decided` call into the same pair.
 - Fixed a spec gap surfaced by dogfooding: `auto_deny` now forbids
   execution and requires `cost.wasted=true`, exactly like `deny`.
+- `.github/workflows/zizmor.yml`: GitHub Actions workflow security scanning
+  via zizmor (not CodeQL, per house standard), gated on `zizmor.yml`
+  config; SARIF/Advanced-Security upload is deferred until the repo goes
+  public (private repos need a GHAS license), so findings currently fail
+  the job via plain annotations instead.
+- `.github/workflows/release.yml`: tag-triggered release pipeline — full
+  CI must pass, then build with `uv build`, publish to TestPyPI via OIDC
+  Trusted Publishing as a dry run gate, then (real tag pushes only)
+  publish to PyPI with PEP 740 Sigstore attestations
+  (`pypa/gh-action-pypi-publish`) plus GitHub build provenance
+  attestations. The `pypi` and `testpypi` GitHub Environments and their
+  Trusted Publisher configuration on PyPI/TestPyPI still need to be set
+  up out-of-band by the project owner — see
+  [docs/plans/going-public-checklist.md](docs/plans/going-public-checklist.md).

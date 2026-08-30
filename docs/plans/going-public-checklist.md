@@ -24,3 +24,27 @@ This repository starts **private**. Before flipping it to public, confirm:
       first push to a public remote — not after).
 - [ ] LICENSE, CODE_OF_CONDUCT.md, SECURITY.md, CONTRIBUTING.md are present
       and not placeholders.
+- [ ] `.github/workflows/zizmor.yml` exists and is green. Once public,
+      flip `advanced-security: "false"` / `annotations: "true"` back to
+      `advanced-security: "true"` so findings land in the Security tab
+      (requires GitHub Advanced Security, free for public repos).
+- [ ] `.github/workflows/release.yml` exists. Before the first tag push:
+  - [ ] A `testpypi` GitHub Environment exists, pointed at a pending
+        Trusted Publisher configured at
+        <https://test.pypi.org/manage/account/publishing/> for
+        `agent-audit-record` / this repo / `release.yml` /
+        `publish-testpypi`.
+  - [ ] A `pypi` GitHub Environment exists, pointed at a pending Trusted
+        Publisher configured at
+        <https://pypi.org/manage/account/publishing/> for
+        `agent-audit-record` / this repo / `release.yml` /
+        `publish-pypi`, with required reviewers set on the environment
+        so a real PyPI publish needs manual approval.
+  - [ ] A `workflow_dispatch` dry run (`testpypi-only: true`) has
+        actually published a build to TestPyPI and it installs cleanly
+        (`pip install -i https://test.pypi.org/simple/
+        agent-audit-record`).
+  - [ ] `agent-audit-record` is claimed on PyPI as more than "unclaimed
+        as of the ADR-0002 check date" — a pending publisher only
+        reserves the name once the first Trusted-Publishing upload
+        actually lands.

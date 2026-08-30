@@ -1,0 +1,31 @@
+name: zizmor
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  zizmor:
+    name: Audit GitHub Actions workflows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # advanced-security (SARIF -> Security tab) requires GitHub Advanced
+      # Security, which isn't available on this private repo. Plain
+      # annotations fail the job on findings without needing that license;
+      # switch to advanced-security once the repo goes public.
+      - uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054 # v0.6.2
+        with:
+          inputs: .github/workflows/
+          config: zizmor.yml
+          advanced-security: "false"
+          annotations: "true"
