@@ -12,6 +12,14 @@ record, not the enforcer.
 > [`docs/plans/going-public-checklist.md`](docs/plans/going-public-checklist.md)
 > for what has to be true before this repo goes public.
 
+An agent proposes a CRM bulk delete. A human denies it. The record shows
+`proposed` + `decided`, no `executed`, and `cost.wasted = true` with the
+inference spend that produced the rejected proposal — the thing no
+existing observability convention can say. This is the real, unedited
+output of [`examples/denied-proposal/run.py`](examples/denied-proposal/):
+
+![A terminal recording of the denied-proposal example: an agent proposes a Salesforce bulk delete, a human denies it, and the printed record shows cost.wasted = true with no executed event ever appearing.](docs/media/denied-proposal.gif)
+
 ## What this is
 
 This repository ships a **specification**, not a library. The Python

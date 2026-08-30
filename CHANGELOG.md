@@ -8,6 +8,15 @@ for the JSON Schema and the Python package independently.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-08-30
+
+M6 of [`BUILD-PLAN.md`](BUILD-PLAN.md): the specification, the reference
+emitter, the flagship human-in-the-loop example, and the GIF showing it.
+The Python package remains `0.1.0.dev0`-versioned separately until it is
+actually published — see
+[docs/plans/going-public-checklist.md](docs/plans/going-public-checklist.md)
+for what's still required before that happens.
+
 ### Added
 
 - Repository scaffold: spec/, py/ reference implementation skeleton,
@@ -64,3 +73,8 @@ for the JSON Schema and the Python package independently.
   Trusted Publisher configuration on PyPI/TestPyPI still need to be set
   up out-of-band by the project owner — see
   [docs/plans/going-public-checklist.md](docs/plans/going-public-checklist.md).
+- `docs/media/denied-proposal.gif`: the flagship GIF (M6) — a real,
+  unedited terminal recording of `examples/denied-proposal/run.py`,
+  generated via the VHS tape at `docs/media/denied-proposal.tape` (not a
+  mockup or narrated screen capture), embedded at the top of
+  [`README.md`](README.md).
