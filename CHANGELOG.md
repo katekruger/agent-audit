@@ -14,9 +14,8 @@ for the JSON Schema and the Python package independently.
   for configuring PyPI/TestPyPI Trusted Publishing, since that
   configuration lives in external accounts this repo can't touch
   directly.
-- M9 prep (not opened): a draft PR branch at
-  `katekruger/semantic-conventions-genai@mcp-2026-07-28-attribute-coverage`
-  catching up the OTel `mcp.*` namespace to the MCP 2026-07-28 protocol
+- M9: [open-telemetry/semantic-conventions-genai#480](https://github.com/open-telemetry/semantic-conventions-genai/pull/480)
+  opened, catching up the OTel `mcp.*` namespace to the MCP 2026-07-28 protocol
   revision — five methods deprecated for having been fully removed
   from the wire schema (`initialize`, `notifications/initialized`,
   `ping`, `resources/subscribe`, `resources/unsubscribe`), four more

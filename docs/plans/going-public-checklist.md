@@ -56,8 +56,8 @@ This repository starts **private**. Before flipping it to public, confirm:
         as of the ADR-0002 check date" — a pending publisher only
         reserves the name once the first Trusted-Publishing upload
         actually lands.
-- [ ] M9 (OTel `mcp.*` PR): a draft exists on
-      `katekruger/semantic-conventions-genai@mcp-2026-07-28-attribute-coverage`,
-      built and validated (`make check-policies`, `make generate-all`)
-      against upstream, but **not opened as a PR** — pending the
-      project owner's review of the draft description.
+- [x] M9 (OTel `mcp.*` PR): opened —
+      [open-telemetry/semantic-conventions-genai#480](https://github.com/open-telemetry/semantic-conventions-genai/pull/480),
+      2026-08-30. Built and validated (`make check-policies`,
+      `make generate-all`) against upstream before opening. Watch for
+      review comments; not merged yet.
