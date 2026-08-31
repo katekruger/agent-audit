@@ -102,3 +102,15 @@ PEP 740 Sigstore attestations — see
   generated via the VHS tape at `docs/media/denied-proposal.tape` (not a
   mockup or narrated screen capture), embedded at the top of
   [`README.md`](README.md).
+- Pre-publish self-audit (round 3 checklist): a generative/adversarial
+  test for `config._parse_level`'s malformed-env-var fallback
+  (`test_from_env_never_crashes_on_arbitrary_garbage`), replacing
+  reliance on a single hand-picked bad string.
+  `integrations/claude-code-hooks/verify_receiver.py`, wired into CI,
+  exercises `receiver.py` in two process shapes — in-process and with a
+  process restart between a denial and a later request for the same
+  `action_id` — after the audit found the receiver was never exercised
+  anywhere (tests, CI, or otherwise) and that its docstring's
+  "stateless" claim contradicted its actual dependence on
+  `Emitter._terminal_decisions` surviving within one process; the
+  docstring is corrected accordingly.
