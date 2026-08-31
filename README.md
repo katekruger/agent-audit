@@ -43,6 +43,12 @@ under separate attribute names (`agent_audit.declared.*` vs.
 the effective conclusion, never the declared claim — see
 [spec §6.4](spec/SPECIFICATION.md#64-declared-vs-effective-annotations).
 
+The PyPI distribution name for the Python package is `agent-audit-record`,
+not `agent-audit` — that name is already taken by an unrelated static
+security analyzer for AI agents, one of whose rules, `AGENT-037`, flags
+"Missing Human-in-the-Loop." That other tool flags the absence of a human
+in the loop; this one records the decision at one.
+
 ## How this relates to what already exists
 
 | Layer | Owner | `agent-audit`'s relationship |

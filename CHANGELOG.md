@@ -8,6 +8,14 @@ for the JSON Schema and the Python package independently.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-08-31
+
+M6 of [`BUILD-PLAN.md`](BUILD-PLAN.md): the specification, the reference
+emitter, the flagship human-in-the-loop example, and the GIF showing it.
+Published to PyPI as `agent-audit-record` via OIDC Trusted Publishing with
+PEP 740 Sigstore attestations — see
+[docs/plans/going-public-checklist.md](docs/plans/going-public-checklist.md).
+
 ### Added
 
 - `docs/plans/pypi-trusted-publishing-setup.md`: precise step-by-step
@@ -34,17 +42,6 @@ for the JSON Schema and the Python package independently.
   expanded from placeholders into full posts. The AGT comparison
   includes a real, signature-checked code sample against the actual
   `Emitter` API rather than a hypothetical one.
-
-## [0.1.0] - 2026-08-30
-
-M6 of [`BUILD-PLAN.md`](BUILD-PLAN.md): the specification, the reference
-emitter, the flagship human-in-the-loop example, and the GIF showing it.
-The Python package remains `0.1.0.dev0`-versioned separately until it is
-actually published — see
-[docs/plans/going-public-checklist.md](docs/plans/going-public-checklist.md)
-for what's still required before that happens.
-
-### Added
 
 - Repository scaffold: spec/, py/ reference implementation skeleton,
   integrations/, examples/, docs/ with initial ADRs.
