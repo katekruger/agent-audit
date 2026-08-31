@@ -34,8 +34,11 @@ This repository starts **private**. Before flipping it to public, confirm:
       flip `advanced-security: "false"` / `annotations: "true"` back to
       `advanced-security: "true"` so findings land in the Security tab
       (requires GitHub Advanced Security, free for public repos).
-- [ ] `.github/workflows/release.yml` exists. Before the first tag push,
-      follow [pypi-trusted-publishing-setup.md](pypi-trusted-publishing-setup.md)
+- [x] `.github/workflows/release.yml` exists — verified 2026-08-31: builds
+      from `py/`, uses OIDC (`id-token: write`, no API token), emits PEP 740
+      Sigstore attestations, TestPyPI dry run gates the real publish. Before
+      the first tag push, follow
+      [pypi-trusted-publishing-setup.md](pypi-trusted-publishing-setup.md)
       end to end:
   - [ ] A `testpypi` GitHub Environment exists, pointed at a pending
         Trusted Publisher configured at
