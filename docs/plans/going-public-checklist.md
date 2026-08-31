@@ -40,17 +40,20 @@ This repository starts **private**. Before flipping it to public, confirm:
       the first tag push, follow
       [pypi-trusted-publishing-setup.md](pypi-trusted-publishing-setup.md)
       end to end:
-  - [ ] A `testpypi` GitHub Environment exists, pointed at a pending
-        Trusted Publisher configured at
+  - [x] A `testpypi` GitHub Environment exists (verified 2026-08-31) —
+        still needs the matching pending Trusted Publisher configured at
         <https://test.pypi.org/manage/account/publishing/> for
         `agent-audit-record` / this repo / `release.yml` /
         `publish-testpypi`.
-  - [ ] A `pypi` GitHub Environment exists, pointed at a pending Trusted
-        Publisher configured at
+  - [x] A `pypi` GitHub Environment exists with `katekruger` as a
+        required reviewer (created 2026-08-31 via `gh api`) — still
+        needs the matching pending Trusted Publisher configured at
         <https://pypi.org/manage/account/publishing/> for
         `agent-audit-record` / this repo / `release.yml` /
-        `publish-pypi`, with required reviewers set on the environment
-        so a real PyPI publish needs manual approval.
+        `publish-pypi`. **This PyPI-side step is a browser action on
+        your own PyPI account and has not been done** — see
+        [pypi-trusted-publishing-setup.md](pypi-trusted-publishing-setup.md)
+        steps 1 and 5.
   - [ ] A `workflow_dispatch` dry run (`testpypi-only: true`) has
         actually published a build to TestPyPI and it installs cleanly
         (`pip install -i https://test.pypi.org/simple/
