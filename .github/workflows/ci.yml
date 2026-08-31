@@ -69,3 +69,6 @@ jobs:
       - name: Smoke-test the flagship example (no OTLP endpoint required)
         working-directory: examples/denied-proposal
         run: uv run --project ../../py --group examples python run.py
+
+      - name: Smoke-test the Claude Code hooks receiver
+        run: uv run --project py python integrations/claude-code-hooks/verify_receiver.py

@@ -20,8 +20,22 @@ Hook -> phase mapping (spec/mappings/claude-code-hooks.md):
 
 A denied action never gets a PostToolUse -- that is the normal denial
 path (spec §5.2 Pattern C), not a missing event this receiver waits for.
-Each hook invocation is handled independently and statelessly; there is no
-correlation-timeout logic here because there is nothing to time out.
+Each hook invocation is handled by its own HTTP request, with no
+correlation-timeout logic, because there is nothing to time out.
+
+This is NOT fully stateless, despite that: the module-level `_emitter`
+below is a long-lived singleton for the life of this process, and its
+`Emitter._terminal_decisions` dict is what makes an out-of-spec
+PostToolUse arriving after a denial raise (and be logged and swallowed,
+per "never crash the host") rather than silently emitting a contradictory
+`executed` record. That guard is process-lifetime-scoped: if this
+receiver process is restarted between a PermissionDenied and a later
+PostToolUse for the same action_id, the new process has no memory of the
+denial and the illegal `executed` record would go through uncaught. In
+the intended deployment (one long-running receiver per Claude Code
+session) this does not arise -- but it means the guard is a debugging aid
+against caller bugs within one process, not a durable, cross-restart
+invariant.
 """
 
 from __future__ import annotations
