@@ -79,6 +79,14 @@ examples/        worked examples, validated against the schema in CI
 docs/            positioning docs and architecture decision records
 ```
 
+## See also
+
+Every project here shares one idea: a GTM system should refuse to act on data it cannot verify.
+
+[n8n-operator](https://github.com/katekruger/n8n-operator) — the same human gate, enforced in a running system rather than described in a schema. Every workflow run passes an approval before it executes.
+
+[instantly-mcp](https://github.com/katekruger/instantly-mcp) — code-enforced autonomy tiers over a live commercial API. The decision boundary this convention records is the one that project already draws.
+
 ## License
 
 Apache-2.0 — see [`LICENSE`](LICENSE).
