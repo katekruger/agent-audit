@@ -41,7 +41,7 @@ dev = [
     # linter/type-checker version bump changing what passes CI should be a
     # deliberate, reviewed change — not something that happens silently on
     # a contributor's next `uv sync`.
-    "ruff==0.16.5",
+    "ruff==0.16.6",
     "pyright==1.1.411",
     "pytest==9.1.1",
     "coverage==7.16.0",
