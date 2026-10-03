@@ -41,16 +41,16 @@ dev = [
     # linter/type-checker version bump changing what passes CI should be a
     # deliberate, reviewed change — not something that happens silently on
     # a contributor's next `uv sync`.
-    "ruff==0.16.5",
-    "pyright==1.1.411",
+    "ruff==0.16.9",
+    "pyright==1.1.414",
     "pytest==9.1.1",
-    "coverage==7.16.0",
+    "coverage==7.16.2",
     "jsonschema>=4.23.0",
 ]
 # Only the flagship example needs a real OTLP exporter; the library itself
 # depends on opentelemetry-api/-sdk alone, never a concrete exporter.
 examples = [
-    "opentelemetry-exporter-otlp-proto-http==1.44.0",
+    "opentelemetry-exporter-otlp-proto-http==1.45.0",
 ]
 
 [tool.hatch.build.targets.wheel]
